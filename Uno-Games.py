@@ -15,10 +15,10 @@ class Oyun:
         self.deste = []
         self.oyuncular = {}        
         self.oyuncu_listesi = []   
-        self.siradaki_index = 0    
+        self.sıradaki_index = 0    
         self.ortadaki_kart = None  
 
-    def deste_olustur(self):
+    def deste_yap(self):
         for renk in self.renkler:
             for sayi in self.sayilar:
                 yeni_kart = Kart(renk, sayi)
@@ -26,17 +26,17 @@ class Oyun:
 
         random.shuffle(self.deste)
 
-    def oyunculari_al_ve_dagit(self):
+    def kart_dagıt(self):
         while True:
-            sayi_input = input("Kaç kişi oynayacak? (En az 2): ")
+            sayi_input = input("Oynayacak kişi sayısı? (En az 2): ")
             if sayi_input.isdigit() and int(sayi_input) >= 2:
                 oyuncu_sayisi = int(sayi_input)
                 break
-            print("Hata: Lütfen en az 2 olacak şekilde bir sayı girin!")
+            print("HATA: Lütfen en az 2 olacak şekilde bir sayı girin!")
 
         for i in range(1, oyuncu_sayisi + 1):
             while True:
-                isim = input(f"{i}. Oyuncunun ismi ne olsun?: ").strip()
+                isim = input(f"{i}. Oyuncunun ismi: ").strip()
                 if isim and isim not in self.oyuncular:
                     self.oyuncular[isim] = []
                     break
@@ -52,17 +52,17 @@ class Oyun:
         self.ortadaki_kart = self.deste.pop()
 
     def baslat(self):
-        self.deste_olustur()
-        self.oyunculari_al_ve_dagit()
+        self.deste_yap()
+        self.kart_dagıt()
 
         while True:
-            siradaki_oyuncu = self.oyuncu_listesi[self.siradaki_index]
-            mevcut_el = self.oyuncular[siradaki_oyuncu]
+            sıradaki_oyuncu = self.oyuncu_listesi[self.sıradaki_index]
+            mevcut_el = self.oyuncular[sıradaki_oyuncu]
 
-            print("\n" + "="*40)
+            print("\n" + "~~"*20)
             print(f"ORTADAKİ KART: [ {self.ortadaki_kart} ]")
-            print(f"SIRA KİMDE: {siradaki_oyuncu}")
-            print("="*40)
+            print(f"SIRA KİMDE: {sıradaki_oyuncu}")
+            print("~~"*20)
 
             print("Kartlarınız:")
             for i, kart in enumerate(mevcut_el, 1):
@@ -85,7 +85,7 @@ class Oyun:
                 else:
                     print("\nDeste bitti, kart çekilemedi!")
                 
-                self.siradaki_index = (self.siradaki_index + 1) % len(self.oyuncu_listesi)
+                self.sıradaki_index = (self.sıradaki_index + 1) % len(self.oyuncu_listesi)
                 continue
 
             secilen_kart = mevcut_el[secim_index - 1]
@@ -93,15 +93,15 @@ class Oyun:
             if secilen_kart.renk == self.ortadaki_kart.renk or secilen_kart.sayi == self.ortadaki_kart.sayi:
                 mevcut_el.remove(secilen_kart)
                 self.ortadaki_kart = secilen_kart
-                print(f"\n{siradaki_oyuncu}, '{secilen_kart}' kartını başarıyla oynadı.")
+                print(f"\n{sıradaki_oyuncu}, '{secilen_kart}' kartını başarıyla oynadı.")
 
                 if len(mevcut_el) == 0:
-                    print("\n" + "*"*50)
-                    print(f"TEBRİKLER! {siradaki_oyuncu} TÜM KARTLARINI BİTİRDİ VE KAZANDI! 🎉")
-                    print("*"*50)
+                    print("\n" + "~~"*25)
+                    print(f"TEBRİKLER! {sıradaki_oyuncu} TÜM KARTLARINI BİTİRDİ VE KAZANDI! 🎉")
+                    print("~~"*25)
                     break  
 
-                self.siradaki_index = (self.siradaki_index + 1) % len(self.oyuncu_listesi)
+                self.sıradaki_index = (self.sıradaki_index + 1) % len(self.oyuncu_listesi)
             else:
                 print("\nHATA: Seçtiğiniz kart ortadaki kartla uyuşmuyor! (Renk veya Sayı aynı olmalı).")
 
